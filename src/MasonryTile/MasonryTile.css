@@ -1,0 +1,14 @@
+.masonry-tile {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 16px;
+  outline: none;
+}
+
+.masonry-tile-selected {
+  position: fixed;
+  transition: all 0.3s;
+  z-index: 10;
+  outline: none;
+}
