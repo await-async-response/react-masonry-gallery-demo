@@ -103,7 +103,7 @@ function MasonryTile({ image, selected, setSelected }: MasonryTileProps) {
       />
       <img
         ref={refSelected}
-        src={selected === image ? image.url : ''} alt={selected === image ? image.caption : ''}
+        src={selected === image ? image.url : undefined} alt={selected === image ? image.caption : ''}
         className="masonry-tile-selected"
         style={{ display: selected === image ? '' : 'none' }}
         onClick={handleUnselect}
