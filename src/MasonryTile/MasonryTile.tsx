@@ -18,19 +18,24 @@ function MasonryTile({ image, selected, setSelected }: MasonryTileProps) {
   const originalPosition = useRef<{ left: number, top: number, width: number, height: number } | null>(null);
   const transitioning = useRef(false);
 
-  const handleSelect = () => {
-    if (transitioning.current) return;
-    transitioning.current = true;
-    setSelected(image);
+  const calcOriginalPosition = () => {
     if (ref.current) {
       const pos = ref.current.getBoundingClientRect();
       originalPosition.current = { left: pos.left, top: pos.top, width: pos.width, height: pos.height };
     }
+  }
+
+  const handleSelect = () => {
+    if (transitioning.current) return;
+    transitioning.current = true;
+    setSelected(image);
+    calcOriginalPosition();
   };
 
   const handleUnselect = () => {
-    if (transitioning.current) return;
-    if (!originalPosition.current || !refSelected.current) return;
+    if (transitioning.current || !originalPosition.current || !refSelected.current) return;
+    // Recalculate original position in case the window was resized or scrolled while the image was selected
+    calcOriginalPosition();
     refSelected.current.style.left = originalPosition.current.left + 'px';
     refSelected.current.style.top = originalPosition.current.top + 'px';
     refSelected.current.style.width = originalPosition.current.width + 'px';
@@ -73,7 +78,7 @@ function MasonryTile({ image, selected, setSelected }: MasonryTileProps) {
           const viewportHeight = window.innerHeight;
           const imageAspectRatio = originalPosition.current!.width / originalPosition.current!.height;
           let newWidth, newHeight;
-          
+
           if (viewportWidth / viewportHeight > imageAspectRatio) {
             newHeight = viewportHeight;
             newWidth = newHeight * imageAspectRatio;
